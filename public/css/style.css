@@ -1,0 +1,110 @@
+#darkModeToggle {
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    color: #212529;
+    transition: color 0.3s, background-color 0.3s, box-shadow 0.3s;
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+.btn-custom {
+    background-color: #1a237e !important;
+    color: white !important;
+}
+.btn-custom:hover {
+    background-color: #0d1656 !important; 
+}
+
+#darkModeToggle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* (Light Mode) */
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+    transition: background 0.3s, color 0.3s;
+}
+
+.navbar {
+    background-color: #f8f9fa !important;
+    color: #212529 !important;
+    transition: background 0.3s, color 0.3s;
+    border-bottom: 1px solid #ddd;
+}
+
+.sidebar {
+    height: 100vh;
+    background-color: #1a237e;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar .nav-link {
+    color: white;
+    padding: 10px 20px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.card {
+    border-radius: 12px;
+    transition: transform 0.3s ease-in-out, background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* (Dark Mode) */
+.dark-mode {
+    background-color: #121212;
+    color: white;
+}
+
+.dark-mode .navbar {
+    background-color: #1e1e1e !important;
+    color: white !important;
+    border-bottom: 1px solid #444;
+}
+
+.dark-mode .sidebar {
+    background-color: #0d1117;
+    color: white;
+}
+
+.dark-mode .sidebar .nav-link {
+    color: #bbb;
+}
+
+.dark-mode .sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/*  Cards in Dark Mode */
+.dark-mode .card {
+    background-color: #252525;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+.dark-mode .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode #darkModeToggle {
+    background-color: #f8f9fa; 
+    color: #121212; 
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode #darkModeToggle:hover {
+    background-color: #e0e0e0;
+}
