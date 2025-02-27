@@ -9,17 +9,8 @@ class Ship extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'note', 'from', 'to', 'weight', 'quantity', 'status', 'image', 'created_by', 'trip_id'
-    ];
+    protected $fillable = ['from', 'to', 'weight',
+     'quantity', 'price', 'total_price', 'total_weight',
+      'status', 'note', 'image'];
 
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function trip()
-    {
-        return $this->belongsTo(Trip::class, 'trip_id');
-    }
 }

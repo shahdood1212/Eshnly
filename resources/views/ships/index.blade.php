@@ -23,8 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($shipments as $ship)
-                <tr>
+                @foreach ($shipments as $ship)                <tr>
                     <td>{{ $ship->From }}</td>
                     <td>{{ $ship->To }}</td>
                     <td>{{ $ship->note }}</td>

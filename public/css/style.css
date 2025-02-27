@@ -108,3 +108,75 @@ body {
 .dark-mode #darkModeToggle:hover {
     background-color: #e0e0e0;
 }
+
+/* Style the status dropdown */
+.status-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Style dropdown when focused */
+.status-select:focus {
+    border-color: #1a237e;
+    box-shadow: 0 0 5px rgba(26, 35, 126, 0.5);
+    outline: none;
+}
+
+/* Style different status options */
+.status-select option[value="pending"] {
+    background-color: #ffeb3b;
+    color: #000;
+}
+
+.status-select option[value="in_transit"] {
+    background-color: #2196f3;
+    color: white;
+}
+
+.status-select option[value="delivered"] {
+    background-color: #4caf50;
+    color: white;
+}
+
+.status-select option[value="canceled"] {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Dark mode styles */
+.dark-mode .status-select {
+    background-color: #252525;
+    color: white;
+    border: 1px solid #444;
+}
+
+.dark-mode .status-select:focus {
+    border-color: #bb86fc;
+    box-shadow: 0 0 5px rgba(187, 134, 252, 0.5);
+}
+
+/* Option styling in dark mode */
+.dark-mode .status-select option[value="pending"] {
+    background-color: #ffeb3b;
+    color: #000;
+}
+
+.dark-mode .status-select option[value="in_transit"] {
+    background-color: #2196f3;
+    color: white;
+}
+
+.dark-mode .status-select option[value="delivered"] {
+    background-color: #4caf50;
+    color: white;
+}
+
+.dark-mode .status-select option[value="canceled"] {
+    background-color: #f44336;
+    color: white;
+}

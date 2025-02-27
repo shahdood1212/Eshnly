@@ -1,16 +1,15 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Ship;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ShipController extends Controller
 {
     public function index()
     {
-        $shipments = Ship::all();
+        $shipments = Ship::orderBy('created_at', 'desc')->get();
         return view('ships.index', compact('shipments'));
     }
 
@@ -21,88 +20,79 @@ class ShipController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'from' => 'required|string|max:255',
             'to' => 'required|string|max:255',
-            'shipment_name' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
             'weight' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'status' => 'required|string|in:pending,in_transit,delivered,canceled', 
+            'note' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $ship = new Ship();
-        $ship->fill($request->except('image'));
-        $ship->total_price = $request->quantity * $request->price;
-        $ship->total_weight = $request->quantity * $request->weight;
-        $ship->status = 'pending';
-        $ship->added_by = auth()->id(); // تخزين المستخدم الذي أضاف الشحنة
-        $ship->image = $this->handleImageUpload($request, $ship);
+        $validated['total_price'] = $validated['price'] * $validated['quantity'];
+        $validated['total_weight'] = $validated['weight'] * $validated['quantity'];
+        $validated['added_by'] = auth()->id();
+        
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('shipments', 'public');
+        }
 
-        $ship->save();
+        Ship::create($validated);
 
-        return redirect()->route('ships.index')->with('success', 'Shipment added successfully');
+        return redirect()->route('ships.index')->with('success', 'Shipment added successfully.');
     }
 
-    public function show($id)
+    public function show(Ship $ship)
     {
-        $ship = Ship::findOrFail($id);
         return view('ships.show', compact('ship'));
     }
 
-    public function edit($id)
+    public function edit(Ship $ship)
     {
-        $ship = Ship::findOrFail($id);
         return view('ships.edit', compact('ship'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Ship $ship)
     {
-        $request->validate([
-            'from' => 'required|string|max:255',
-            'to' => 'required|string|max:255',
-            'shipment_name' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
-            'weight' => 'required|numeric|min:0',
-            'price' => 'required|numeric|min:0',
-            'status' => 'required|string|in:pending,shipped,delivered',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        $validatedData = $request->validate([
+            'from' => 'required|string',
+            'to' => 'required|string',
+            'weight' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'price' => 'required|numeric',
+            'status' => 'required|string',
+            'note' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
         ]);
+        
+        $validatedData['total_price'] = $validatedData['price'] * $validatedData['quantity'];
+        
+        $ship->update($validatedData);
+        
+        $validatedData['total_weight'] = $validatedData['weight'] * $validatedData['quantity'];
 
-        $ship = Ship::findOrFail($id);
-        $ship->fill($request->except('image'));
-        $ship->image = $this->handleImageUpload($request, $ship);
-
-        $ship->save();
-
-        return redirect()->route('ships.index')->with('success', 'Shipment updated successfully');
-    }
-
-    public function destroy($id)
-    {
-        try {
-            $ship = Ship::findOrFail($id);
-
-            if ($ship->image) {
-                Storage::disk('public')->delete($ship->image);
-            }
-
-            $ship->delete();
-
-            return redirect()->route('ships.index')->with('success', 'Shipment deleted successfully');
-        } catch (\Exception $e) {
-            return redirect()->route('ships.index')->with('error', 'Failed to delete shipment: ' . $e->getMessage());
-        }
-    }
-
-    private function handleImageUpload(Request $request, $ship)
-    {
         if ($request->hasFile('image')) {
             if ($ship->image) {
                 Storage::disk('public')->delete($ship->image);
             }
-            return $request->file('image')->store('ships', 'public');
+            $validated['image'] = $request->file('image')->store('shipments', 'public');
         }
-        return $ship->image;
+
+        $ship->update($validated);
+
+        return redirect()->route('ships.index')->with('success', 'Shipment updated successfully.');
+    }
+
+    public function destroy(Ship $ship)
+    {
+        if ($ship->image) {
+            Storage::disk('public')->delete($ship->image);
+        }
+        
+        $ship->delete();
+
+        return redirect()->route('ships.index')->with('success', 'Shipment deleted successfully.');
     }
 }

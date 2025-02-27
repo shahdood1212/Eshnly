@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('From');
             $table->string('To');
             $table->double('weight');
+            $table->double('price');
             $table->integer('quantity');
+            $table->decimal('total_price', 10, 2)->default(0);
             $table->enum('status' , ['pending','in_transit','delivered','canceled'])->default('pending');
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('clients');
