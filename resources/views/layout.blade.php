@@ -52,8 +52,8 @@
                             <i class="fas fa-plus me-2"></i> Trips
                         </a>
                     </li><li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-plus me-2"></i> Shipments
+                    <a class="nav-link" href="{{ route('ships.index') }}">
+                            <i class="fas fa-ship me-2"></i> Shipments
                         </a>
                     </li><li class="nav-item">
                         <a class="nav-link" href="#">
