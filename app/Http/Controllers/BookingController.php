@@ -2,63 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $bookings = Booking::all();
+        return view('bookings.index', compact('bookings'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+    
     public function create()
     {
-        //
+        return view('bookings.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'trip_id' => 'required|exists:trips,id',
+            'ship_id' => 'required|exists:ships,id',
+            'price' => 'required|numeric|min:0',
+            'status' => 'required|string|in:pending,accepted,rejected,completed',
+        ]);
+
+        Booking::create($validated);
+
+        return redirect()->route('bookings.index')->with('success', 'Booking added successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Booking $booking)
     {
-        //
+        return view('bookings.show', compact('booking'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Booking $booking)
     {
-        //
+        return view('bookings.edit', compact('booking'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Booking $booking)
     {
-        //
+        $validated = $request->validate([
+            'trip_id' => 'required|exists:trips,id',
+            'ship_id' => 'required|exists:ships,id',
+            'price' => 'required|numeric|min:0',
+            'status' => 'required|string|in:pending,accepted,rejected,completed',
+        ]);
+
+        $booking->update($validated);
+
+        return redirect()->route('bookings.index')->with('success', 'Booking updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Booking $booking)
     {
-        //
+        $booking->delete();
+
+        return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully.');
     }
 }

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-4">
     <div class="card shadow-lg p-4">
-        <h2 class="mb-3">Ship Details</h2>
+        <h2 class="mb-3">Shipment Details</h2>
 
         <table class="table table-bordered">
             <tr>
@@ -16,11 +16,11 @@
             </tr>
             <tr>
                 <th>From</th>
-                <td>{{ $ship->From }}</td>
+                <td>{{ $ship->from }}</td>
             </tr>
             <tr>
                 <th>To</th>
-                <td>{{ $ship->To }}</td>
+                <td>{{ $ship->to }}</td>
             </tr>
             <tr>
                 <th>Weight</th>
@@ -29,6 +29,18 @@
             <tr>
                 <th>Quantity</th>
                 <td>{{ $ship->quantity }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>${{ $ship->price }}</td>
+            </tr>
+            <tr>
+                <th>Total Price</th>
+                <td>${{ $ship->total_price }}</td>
+            </tr>
+            <tr>
+                <th>Total Weight</th>
+                <td>{{ $ship->total_weight }} kg</td>
             </tr>
             <tr>
                 <th>Status</th>
@@ -49,7 +61,17 @@
             <tr>
                 <th>Updated At</th>
                 <td>{{ $ship->updated_at ? $ship->updated_at->format('Y-m-d H:i') : 'N/A' }}</td>
-                </tr>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>
+                    @if($ship->image)
+                        <img src="{{ asset('storage/' . $ship->image) }}" alt="Shipment Image" class="img-fluid" width="200">
+                    @else
+                        No image available
+                    @endif
+                </td>
+            </tr>
         </table>
 
         <a href="{{ route('ships.index') }}" class="btn btn-primary mt-3">

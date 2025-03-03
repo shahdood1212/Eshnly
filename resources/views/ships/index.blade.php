@@ -32,8 +32,8 @@
                     <td>
                         @if($ship->status == 'pending')
                             <span class="badge bg-warning">Pending</span>
-                        @elseif($ship->status == 'shipped')
-                            <span class="badge bg-primary">Shipped</span>
+                        @elseif($ship->status == 'in_transit')
+                            <span class="badge bg-primary">in transit</span>
                         @elseif($ship->status == 'delivered')
                             <span class="badge bg-success">Delivered</span>
                         @endif

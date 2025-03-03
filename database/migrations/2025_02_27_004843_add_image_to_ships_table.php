@@ -4,25 +4,28 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('ships', function (Blueprint $table) {
-        $table->string('image')->nullable()->after('status');
-    });
-}
+    {
+        Schema::table('ships', function (Blueprint $table) {
+            if (!Schema::hasColumn('ships', 'image')) {
+                $table->string('image')->nullable()->after('status');
+            }
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
-{
-    Schema::table('ships', function (Blueprint $table) {
-        $table->dropColumn('image');
-    });
-}
+    {
+        Schema::table('ships', function (Blueprint $table) {
+            if (Schema::hasColumn('ships', 'image')) {
+                $table->dropColumn('image');
+            }
+        });
+    }
 };
