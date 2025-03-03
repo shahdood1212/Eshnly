@@ -20,7 +20,7 @@ return new class extends Migration
             $table->double('free_weight');
             $table->enum('status' , ['pending','canceled','completed'])->default('pending');
             $table->unsignedBigInteger('created_by');
-            $table->foreign('created_by')->references('id')->on('clients');
+            $table->foreign('created_by')->references('id')->on('clients')->onDelete('cascade');
             $table->timestamps();
         });
     }

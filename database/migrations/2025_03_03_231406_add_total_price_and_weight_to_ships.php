@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wallet', function (Blueprint $table) {
-            $table->id();
-            $table->double('balance');
-            $table->unsignedBigInteger('created_by');
-            $table->foreign('created_by')->references('id')->on('clients');
-            $table->timestamps();
+        Schema::table('ships', function (Blueprint $table) {
+            //
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wallet');
+        Schema::table('ships', function (Blueprint $table) {
+            //
+        });
     }
 };

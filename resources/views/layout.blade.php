@@ -43,24 +43,25 @@
 </div>
  <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="fas fa-home me-2"></i> Booking
+                        <a class="nav-link active" href="{{ route('bookings.index') }}">
+                        <i class="fas fa-ticket-alt me-2"></i> Booking
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-plus me-2"></i> Trips
-                        </a>
+                    <a class="nav-link" href="{{ route('trips.index') }}">
+                        <i class="fas fa-plane me-2"></i> Trips
+                    </a>
+                </li>
                     </li><li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-plus me-2"></i> Shipments
+                    <a class="nav-link" href="{{ route('ships.index') }}">
+                            <i class="fas fa-ship me-2"></i> Shipments
                         </a>
-                    </li><li class="nav-item">
+                    <!-- </li><li class="nav-item">
                         <a class="nav-link" href="#">
                             <i class="fas fa-plus me-2"></i> Users
                         </a>
                     </li>
-                    
+                     -->
                 </ul>
             </div>
 
