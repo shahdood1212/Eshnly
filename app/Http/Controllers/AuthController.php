@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         if ($this->handleLogin($request->only('email', 'password'))) {
-            return redirect()->route('ships.index')->with('success', 'Logged in successfully.');
+            return redirect()->route('bookings.index')->with('success', 'Logged in successfully.');
         }
 
         return back()->withErrors(['email' => 'Invalid login credentials.']);
@@ -43,7 +43,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect()->route('ships.index')->with('success', 'Registration successful!');
+        return redirect()->route('bookings.index')->with('success', 'Registration successful!');
     }
 
     public function logout()
