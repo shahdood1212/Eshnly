@@ -118,18 +118,27 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Http\Requests\ShipRequest;
 use App\Http\Resources\ShipResource;
+use App\Filters\ShipFilter;
 
 class ShipController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $shipments = Ship::with(['trip', 'user'])->latest()->get();
+        $query = Ship::with(['trip', 'user']);
+        
+        // Apply filtering
+        $filter = new ShipFilter($request);
+        $query = $filter->apply($query);
+    
+        // Paginate and return results
+        $shipments = $query->latest()->paginate(10);
+    
         return ShipResource::collection($shipments);
     }
-
+    
     public function store(Request $request)
     {
-        // التحقق من صحة البيانات
         $validationResponse = ShipRequest::validate($request);
         if ($validationResponse) {
             return $validationResponse;
