@@ -20,12 +20,12 @@ return new class extends Migration
             $table->double('price');
             $table->integer('quantity');
             $table->decimal('total_price', 10, 2)->nullable();
-$table->decimal('total_weight', 10, 2)->nullable();
+            $table->decimal('total_weight', 10, 2)->nullable();
 
             $table->enum('status', ['pending', 'in_transit', 'delivered'])->default('pending');
             $table->string('image')->nullable();
             $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('trip_id');
+            $table->unsignedBigInteger('trip_id')->nullable();
             $table->foreign('trip_id')->references('id')->on('trips')->onDelete('cascade');
             $table->timestamps();
             $table->engine = 'InnoDB';
@@ -49,9 +49,7 @@ $table->decimal('total_weight', 10, 2)->nullable();
         // });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    
     public function down(): void
     {
         Schema::table('ships', function (Blueprint $table) {

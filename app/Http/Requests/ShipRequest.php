@@ -2,27 +2,29 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class ShipRequest extends FormRequest
+class ShipRequest
 {
-    public function authorize()
+    public static function validate(Request $request)
     {
-        return true; 
-    }
-
-    public function rules()
-    {
-        return [
+        $validator = Validator::make($request->all(), [
+            'note' => 'nullable|string|max:255',
             'from' => 'required|string|max:255',
             'to' => 'required|string|max:255',
             'weight' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
-            'status' => 'required|string|in:pending,in_transit,delivered,canceled',
-            'note' => 'nullable|string|max:255',
-            'trip_id' => 'required|exists:trips,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ];
+            'quantity' => 'required|integer|min:1',
+            'status' => 'required|string|in:pending,in_transit,delivered',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'trip_id' => 'nullable|exists:trips,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        return null;
     }
 }
