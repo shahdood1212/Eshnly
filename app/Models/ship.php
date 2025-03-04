@@ -8,25 +8,31 @@ use Illuminate\Database\Eloquent\Model;
 class Ship extends Model
 {
     use HasFactory;
+
     protected $table = 'ships';
+
     protected $fillable = [
-        'from', 'to', 'weight', 'quantity', 'price', 'total_price', 'total_weight', 'image', 'status', 'note', 'created_by', 'trip_id'
+        'note', 'from', 'to', 'weight', 'price', 'quantity',
+        'total_price', 'total_weight', 'status', 'image', 'created_by', 'trip_id'
     ];
-    
+
+    protected $casts = [
+        'from' => 'string',
+        'to' => 'string',
+    ];
+
     public function getImageAttribute($value)
     {
         return trim($value);
     }
+
     public function trip()
     {
         return $this->belongsTo(Trip::class, 'trip_id');
     }
-    public function setTotalPriceAttribute()
-    {
-        $this->attributes['total_price'] = $this->attributes['price'] * $this->attributes['quantity'];
-    }
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'added_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 }
