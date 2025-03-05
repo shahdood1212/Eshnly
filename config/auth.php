@@ -35,18 +35,29 @@ return [
     'guard' => 'api',
     'passwords' => 'users',
 ],
-
 'guards' => [
     'api' => [
+        'driver' => 'jwt',
+        'provider' => 'clients',
+    ],
+    'client' => [
+        'driver' => 'jwt',
+        'provider' => 'clients',
+    ],
+    'user' => [
         'driver' => 'jwt',
         'provider' => 'users',
     ],
 ],
-
 'providers' => [
     'users' => [
         'driver' => 'eloquent',
         'model' => App\Models\User::class,
+    ],
+
+    'clients' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Client::class,
     ],
 ],
 

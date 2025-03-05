@@ -1,72 +1,76 @@
 <?php
-
-namespace App\Http\Controllers\ApiController;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Trip;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\TripRequest;
 use App\Http\Resources\TripResource;
-use App\Http\Resources\ShipResource;
-use Illuminate\Http\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TripController extends Controller
 {
     
+    private function getClient()
+    {
+        $client = JWTAuth::parseToken()->authenticate();
+
+        if (!$client || $client->role !== 'client') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        return $client;
+    }
+
+    
     public function index()
     {
-        $trips = Trip::all();
-        return TripResource::collection($trips);
+        $this->getClient(); // التحقق من المستخدم
+        return TripResource::collection(Trip::all());
     }
 
-    
-    public function store(Request $request)
+    public function store(TripRequest $request)
     {
-        $request->validate([
-            'From' => 'required|string',
-            'To' => 'required|string',
-            'departure_date' => 'required|date',
-            'arrival_date' => 'required|date',
-            'free_weight' => 'required|numeric',
-            'status' => 'in:pending,canceled,completed',
-            'created_by' => 'required|exists:clients,id'
-        ]);
+        $client = $this->getClient();
 
-        $trip = Trip::create($request->all());
+        $trip = Trip::create(array_merge($request->validated(), ['created_by' => $client->id]));
+
         return new TripResource($trip);
     }
 
     
-    public function show(string $id)
+    public function show($id)
     {
-        $trip = Trip::find($id);
-        if (!$trip) {
-            return response()->json(['message' => 'Trip not found'], 404);
-        }
-        return new TripResource($trip);
-    }
-
-    
-    public function update(Request $request, string $id)
-    {
-        $trip = Trip::find($id);
-        $request->validate([
-            'From' => 'string',
-            'To' => 'string',
-            'departure_date' => 'date',
-            'arrival_date' => 'date',
-            'free_weight' => 'numeric',
-            'status' => 'in:pending,canceled,completed',
-            'created_by' => 'exists:clients,id'
-        ]);
-        $trip->update($request->all());
-        return new TripResource($trip); 
-    }
-
-    
-    public function destroy(string $id)
-    {
+        $this->getClient();
         $trip = Trip::findOrFail($id);
+
+        return new TripResource($trip);
+    }
+
+    public function update(TripRequest $request, $id)
+    {
+        $client = $this->getClient();
+        $trip = Trip::findOrFail($id);
+
+        if ($trip->created_by !== $client->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $trip->update($request->validated());
+
+        return new TripResource($trip);
+    }
+    
+    public function destroy($id)
+    {
+        $client = $this->getClient();
+        $trip = Trip::findOrFail($id);
+
+        if ($trip->created_by !== $client->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $trip->delete();
+
         return response()->json(['message' => 'Trip deleted successfully'], 200);
     }
 }

@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
-            $table->string('From');
-            $table->string('To');
-            $table->string('departure_date');
-            $table->string('arrival_date');
+            $table->string('from');
+            $table->string('to');
+            $table->date('departure_date');
+            $table->date('arrival_date');
             $table->double('free_weight');
-            $table->enum('status' , ['pending','canceled','completed'])->default('pending');
-            $table->unsignedBigInteger('created_by');
-            $table->foreign('created_by')->references('id')->on('clients')->onDelete('cascade');
+            $table->enum('status', ['pending', 'canceled', 'completed'])->default('pending');
+            $table->foreignId('created_by')->constrained('clients')->onDelete('cascade');
             $table->timestamps();
         });
+        
     }
 
     /**
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_trips');
+        Schema::dropIfExists('trips');
     }
 };

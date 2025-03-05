@@ -7,53 +7,57 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Http\Requests\ClientRequest;
 
 class ClientController extends Controller
 {
-    
+    public function store(ClientRequest $request)
+{
+    $client = Client::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'phone' => $request->phone,
+    ]);
+
+    return new ClientResource($client);
+}
+
+public function login(Request $request)
+{
+    $credentials = $request->only('email', 'password');
+
+    try {
+        if (!$token = auth('client')->attempt($credentials)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+    } catch (JWTException $e) {
+        return response()->json(['error' => 'Could not create token'], 500);
+    }
+
+    return response()->json([
+        'token' => $token,
+        'token_type' => 'bearer',
+        'expires_in' => auth('client')->factory()->getTTL() * 60
+    ], 200);
+}
+
+
     public function index()
     {
-        $clients = Client::all();
-        return ClientResource::collection($clients);
+        return ClientResource::collection(Client::all());
     }
 
-   
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:clients,email',
-            'password' => 'required|string|min:6',
-            'phone' => 'required|string|max:15',
-        ]);
-
-        $client = Client::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), // تشفير الباسورد
-            'phone' => $request->phone,
-        ]);
-
-        return new ClientResource($client);
-    }
-
-    
     public function show(Client $client)
     {
         return new ClientResource($client);
     }
 
-    
-    public function update(Request $request, Client $client)
+    public function update(ClientRequest $request, Client $client)
     {
-        $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:clients,email,' . $client->id,
-            'password' => 'sometimes|string|min:6',
-            'phone' => 'sometimes|string|max:15',
-        ]);
-
         $data = $request->only(['name', 'email', 'phone']);
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
@@ -66,6 +70,6 @@ class ClientController extends Controller
     public function destroy(Client $client)
     {
         $client->delete();
-        return response()->json(['message' => 'Client deleted successfully'],200);
+        return response()->json(['message' => 'Client deleted successfully'], 200);
     }
 }

@@ -18,18 +18,14 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone'); 
             $table->timestamps();
-        
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down()
-{
-    Schema::disableForeignKeyConstraints();
-    Schema::dropIfExists('clients');
-    Schema::enableForeignKeyConstraints(); 
-}
+    public function down(): void
+    {
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('clients');
+        Schema::enableForeignKeyConstraints(); 
+    }
 
 };
