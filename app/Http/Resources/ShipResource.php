@@ -2,30 +2,26 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class ShipResource extends JsonResource
 {
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'from' => $this->from,
+            'note' => $this->note,
+            'from' => $this->from,  // التأكد من استرجاع القيم الصحيحة
             'to' => $this->to,
             'weight' => $this->weight,
-            'quantity' => $this->quantity,
             'price' => $this->price,
+            'quantity' => $this->quantity,
             'total_price' => $this->total_price,
-            'total_weight' => $this->total_weight,
             'status' => $this->status,
-            'note' => $this->note,
-            'trip_id' => $this->trip_id,
-            'image_url' => $this->image ? asset(Storage::url($this->image)) : null,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'trip' => $this->trip,
-            'created_by' => $this->user 
+            'created_by' => $this->created_by,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

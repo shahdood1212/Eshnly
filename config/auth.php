@@ -12,10 +12,9 @@ return [
     | as required, but they're a perfect start for most applications.
     |
     */
-'defaults' => [
-    'guard' => 'api',
-    'passwords' => 'users',
-],
+
+
+    
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -32,13 +31,24 @@ return [
     | Supported: "session"
     |
     */
+'defaults' => [
+    'guard' => 'api',
+    'passwords' => 'users',
+],
 
-    'guards' => [
-        'api' => [
-            'driver' => 'jwt',
-            'provider' => 'users',
-        ],
+'guards' => [
+    'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
     ],
+],
+
+'providers' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\User::class,
+    ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -57,11 +67,16 @@ return [
     |
     */
 
-        'providers' => [
+    'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
+
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*
@@ -106,3 +121,4 @@ return [
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
 ];
+
