@@ -12,7 +12,7 @@
                 </div>
             </a>
         </div>
-
+غثس
         <!-- Card 2: Total Price of Books -->
         <div class="col-md-4">
             <a href="{{ route('books.prices') }}" class="text-decoration-none">
