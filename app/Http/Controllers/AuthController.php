@@ -45,12 +45,8 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-<<<<<<< HEAD
-        return redirect()->route('bookings.index')->with('success', 'Registration successful!');
-=======
         return redirect()->route('ships.index')->with('success', 'Registration successful!');
         
->>>>>>> 3733f25 (Added CRUD API for trips)
     }
 
     public function logout()
