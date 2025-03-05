@@ -3,10 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController\ShipController;
+use App\Http\Controllers\ApiController\TripController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\Admin\AdminController;
 
 Route::apiResource('ships', ShipController::class);
+Route::apiResource('trips', TripController::class);
 
 
 // Route::middleware('auth:api')->group(function () {
