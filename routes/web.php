@@ -6,12 +6,10 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\AuthController;
 
-// ✅ الصفحة الرئيسية - توجيه المستخدم بناءً على تسجيل الدخول
 Route::get('/', function () {
     return auth()->check() ? redirect('/dashboard') : view('login');
 })->name('home');
 
-// ✅ مسارات السفن (Ships)
 Route::prefix('ships')->middleware('auth')->group(function () {
     Route::get('/', [ShipController::class, 'index'])->name('ships.index');
     Route::post('/', [ShipController::class, 'store'])->name('ships.store');
@@ -22,7 +20,6 @@ Route::prefix('ships')->middleware('auth')->group(function () {
     Route::get('/{ship}/edit', [ShipController::class, 'edit'])->name('ships.edit');
 });
 
-// ✅ مسارات الحجوزات (Bookings)
 Route::prefix('bookings')->middleware('auth')->group(function () {
     Route::get('/', [BookingController::class, 'index'])->name('bookings.index');
     Route::post('/', [BookingController::class, 'store'])->name('bookings.store');
@@ -33,7 +30,6 @@ Route::prefix('bookings')->middleware('auth')->group(function () {
     Route::get('/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
 });
 
-// ✅ مسارات الرحلات (Trips)
 Route::prefix('trips')->middleware('auth')->group(function () {
     Route::get('/', [TripController::class, 'index'])->name('trips.index');
     Route::post('/', [TripController::class, 'store'])->name('trips.store');

@@ -31,12 +31,10 @@ class ShipController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        // حساب القيم الإجمالية
         $validated['total_price'] = $validated['price'] * $validated['quantity'];
         $validated['total_weight'] = $validated['weight'] * $validated['quantity'];
         $validated['added_by'] = auth()->id();
 
-        // حفظ الصورة إذا تم رفعها
         if ($request->hasFile('image')) {
             $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $validated['image'] = $request->file('image')->storeAs('shipments', $filename, 'public');
@@ -74,14 +72,11 @@ class ShipController extends Controller
         $validated['total_price'] = isset($validated['price'], $validated['quantity']) ? $validated['price'] * $validated['quantity'] : 0;
         $validated['total_weight'] = isset($validated['weight'], $validated['quantity']) ? $validated['weight'] * $validated['quantity'] : 0;
          
-        // التعامل مع الصورة إذا تم رفعها
         if ($request->hasFile('image')) {
-            // حذف الصورة القديمة إذا وجدت
             if ($ship->image && Storage::disk('public')->exists($ship->image)) {
                 Storage::disk('public')->delete($ship->image);
             }
         
-            // رفع الصورة الجديدة
             $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $validated['image'] = $request->file('image')->storeAs('shipments', $filename, 'public');
         }
@@ -96,18 +91,16 @@ class ShipController extends Controller
             'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        // حفظ الملف في التخزين العام
         $path = $request->file('file')->store('uploads', 'public');
 
         return response()->json([
-            'message' => 'تم رفع الملف بنجاح!',
+            'message' => 'image uploaded!',
             'path' => Storage::url($path),
         ]);
     }
 
     public function destroy(Ship $ship)
     {
-        // حذف الصورة إذا كانت موجودة
         if ($ship->image && Storage::disk('public')->exists($ship->image)) {
             Storage::disk('public')->delete($ship->image);
         }
