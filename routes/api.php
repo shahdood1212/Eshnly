@@ -30,5 +30,4 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::apiResource('ships', ShipController::class);
     Route::apiResource('trips', TripController::class);
     Route::apiResource('clients', ClientController::class);
-    
 });
