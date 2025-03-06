@@ -15,7 +15,7 @@ class ShipController extends Controller
     {
         $client = JWTAuth::parseToken()->authenticate();
 
-        if (!$client || $client->role !== 'client') {
+        if (!$client ) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 

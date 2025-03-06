@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Booking;
 use App\Policies\BookingPolicy;
-
+use Tymon\JWTAuth\Providers\LaravelServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     protected $policies = [
@@ -15,8 +15,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        //
-    }
+        $this->app->register(LaravelServiceProvider::class);    }
 
     public function boot(): void
     {

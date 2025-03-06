@@ -26,23 +26,20 @@ class ClientController extends Controller
     return new ClientResource($client);
 }
 
+
 public function login(Request $request)
 {
     $credentials = $request->only('email', 'password');
 
-    try {
-        if (!$token = auth('client')->attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
-        }
-    } catch (JWTException $e) {
-        return response()->json(['error' => 'Could not create token'], 500);
+    if (!$token = Auth::guard('client')->attempt($credentials)) {
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     return response()->json([
-        'token' => $token,
+        'access_token' => $token,
         'token_type' => 'bearer',
         'expires_in' => auth('client')->factory()->getTTL() * 60
-    ], 200);
+    ]);
 }
 
 

@@ -31,35 +31,50 @@ return [
     | Supported: "session"
     |
     */
-'defaults' => [
-    'guard' => 'api',
-    'passwords' => 'users',
-],
-'guards' => [
-    'api' => [
-        'driver' => 'jwt',
-        'provider' => 'clients',
-    ],
-    'client' => [
-        'driver' => 'jwt',
-        'provider' => 'clients',
-    ],
-    'user' => [
-        'driver' => 'jwt',
-        'provider' => 'users',
-    ],
-],
-'providers' => [
-    'users' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\User::class,
-    ],
+// 'defaults' => [
+//     'guard' => 'api',
+//     'passwords' => 'users',
+// ],
+// 'guards' => [
+//     'api' => [
+//         'driver' => 'jwt',
+//         'provider' => 'clients',
+//     ],
+//     'clients' => [
+//         'driver' => 'jwt',
+//         'provider' => 'clients',
+//     ],
+//     'user' => [
+//         'driver' => 'jwt',
+//         'provider' => 'users',
+//     ],
+// ],
+// 'providers' => [
+//     'users' => [
+//         'driver' => 'eloquent',
+//         'model' => App\Models\User::class,
+//     ],
 
+//     'clients' => [
+//         'driver' => 'eloquent',
+//         'model' => App\Models\Client::class,
+//     ],
+// ],
+
+'guards' => [
+    'clients' => [
+        'driver' => 'jwt', 
+        'provider' => 'clients',
+    ],
+],
+
+'providers' => [
     'clients' => [
         'driver' => 'eloquent',
         'model' => App\Models\Client::class,
     ],
 ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -78,17 +93,17 @@ return [
     |
     */
 
-    'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
-        ],
+    // 'providers' => [
+    //     'users' => [
+    //         'driver' => 'eloquent',
+    //         'model' => env('AUTH_MODEL', App\Models\User::class),
+    //     ],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-    ],
+    // ],
 
     /*
     |--------------------------------------------------------------------------
